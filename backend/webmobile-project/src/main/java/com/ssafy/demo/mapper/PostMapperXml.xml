@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.demo.mapper.PostMapper">
+
+	<insert id="insert" parameterType="PostDTO">
+		INSERT INTO POST(seq, title, description, updateDate, createDate, name, content, thumbnail)
+		 VALUES(#{seq}, #{title}, #{description}, #{updateDate},#{createDate}, #{name}, #{content}, #{thumbnail})
+	</insert>
+	
+	<select id="selectByPostNo" parameterType="int" resultType="PostDTO">
+		SELECT * FROM POST WHERE postNo=#{postNo}
+	</select>
+	
+	<update id="update" parameterType="PostDTO">
+		update post
+		set title=#{title}, description=#{description}, updateDate=#{updateDate}, content=#{content}, thumbnail=#{thumbnail} 
+		where postNo=#{postNo}
+		
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from post where postNo=#{postNo}
+	</delete>
+	
+	<select id="selectAll" resultType="PostSimpleDTO">
+		select 
+		postNo, title, seq, description, name, thumbnail, createDate, views, likes 
+		from Post;
+	</select>
+	
+	<select id="selectByKeyword" resultType="PostSimpleDTO">
+		select 
+		postNo, title, seq, description, name, thumbnail, createDate, views, likes 
+		from Post 
+		where title like #{keyword} or description like #{keyword} order by postNo desc
+	</select>
+	
+	<select id="pageList" resultType="PostSimpleDTO">
+		select 
+		postNo, title, seq, description, name, thumbnail, createDate, views, likes 
+		from Post 
+		where title like #{keyword} or description like #{keyword} order by postNo desc limit #{startCol},#{count}
+	</select>
+	
+	<select id="selectListByViewsTop" resultType="PostSimpleDTO">
+		select 
+		postNo, title, seq, description, name, thumbnail, createDate, views, likes 
+		from Post  
+		order by views desc limit 0,#{per}
+	</select>
+	
+	<select id="selectBySeq" resultType="PostDTO">
+		select 
+		*
+		from post
+		where seq=#{seq} 
+		order by postNo desc
+	</select>
+	
+	<update id="increaseLikesByPostNo" parameterType="int">
+		update post set likes=likes+1 where postNo=#{postNo};
+	</update>
+	
+	<update id="increaseViewsByPostNo" parameterType="int">
+		update post set views=views+1 where postNo=#{postNo};
+	</update>
+	
+	
+<!-- 	<resultMap type="PostDTO" id="PostDTO"> -->
+<!-- 		<result column="NO" property="boardNum"/>	 -->
+<!-- 		<result column="WRITE_DATE" property="writeDate"/> -->
+<!-- 		<result column="READ_COUNT" property="readCount"/> -->
+<!-- 		<result column="WRITER_NUM" property="writerNum"/> -->
+<!-- 		<result column="REPLY_COUNT" property="replyCount"/> -->
+<!-- 	</resultMap> -->
+</mapper>

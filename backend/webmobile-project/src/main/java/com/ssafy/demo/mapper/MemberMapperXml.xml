@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.demo.mapper.MemberMapper">
+
+	<insert id="insert" parameterType="MemberDTO">
+		insert 
+		into Member(email,password,name,age,gender,phone,create_at,type) 
+		value(#{email}, #{password}, #{name}, #{age}, #{gender}, #{phone}, now(), #{type});
+	</insert>
+
+	<update id="update" parameterType="MemberDTO">
+		update Member
+		set phone=#{phone}, type=#{type} 
+		where email=#{email}
+	</update>
+	
+	<update id="updateWithPassword" parameterType="MemberDTO">
+		update Member
+		set password=#{password}, phone=#{phone}, type=#{type} 
+		where email=#{email}
+	</update>
+	<delete id="deleteBySeq" parameterType="int">
+		delete from Member where seq=#{seq}
+	</delete>
+	
+	<delete id="deleteByEmail" parameterType="String">
+		delete from Member where email=#{email}	
+	</delete>
+	
+	<select id="selectByEmail" parameterType="String" resultType="MemberDTO">
+		SELECT * FROM Member WHERE email=#{email}
+	</select>
+	
+	<select id="selectByEmailAndPassword" parameterType="String" resultType="MemberDTO">
+		SELECT * FROM Member WHERE email=#{email} and password=#{password}
+	</select>
+	
+	<select id="selectAll" resultType="MemberDTO">
+		SELECT * FROM Member ORDER BY SEQ DESC
+	</select>
+	
+	<select id="searchByName" parameterType="String"  resultType="MemberDTO">
+		select * from member where name like #{name} order by seq desc
+	</select>
+	
+	<select id="searchByEmail" parameterType="String"  resultType="MemberDTO">
+		select * from member where email like #{name} order by seq desc
+	</select>
+	
+	<select id="pageListByEmail" resultType="MemberDTO">
+		select 
+		* 
+		from member 
+		where email like #{email} order by seq desc limit #{startCol},#{count}
+	</select>
+	
+</mapper>
